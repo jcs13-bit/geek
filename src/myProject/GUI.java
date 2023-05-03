@@ -9,53 +9,56 @@ import java.awt.*;
  * @version v.1.0.0 date:21/03/2023
  */
 public class GUI extends JFrame {
+    private JPanel panelDadosActivos;
+    private JPanel panelDadosInactivos;
+    private JPanel panelDadosUtilizados;
+    private JPanel panelMarcadorPuntaje;
 
-    private Header headerProject;
+    public GUI() {
+        // Configurar la ventana principal
+        setTitle("Geek Masters");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    /**
-     * Constructor of GUI class
-     */
-    public GUI(){
-        initGUI();
+        // Crear los cuatro paneles y asignarles un título
+        JPanel panel1 = new JPanel();
+        panel1.setBorder(BorderFactory.createTitledBorder("Dados Activos"));
+        JPanel panel2 = new JPanel();
+        panel2.setBorder(BorderFactory.createTitledBorder("Dados Inactivos"));
+        JPanel panel3 = new JPanel();
+        panel3.setBorder(BorderFactory.createTitledBorder("Tarjeta Puntuación"));
+        JPanel panel4 = new JPanel();
+        panel4.setBorder(BorderFactory.createTitledBorder("Dados Utilizados"));
+        JPanel panel5 = new JPanel();
 
-        //Default JFrame configuration
-        this.setTitle("The Title app");
-        this.setSize(200,100);
-        //this.pack();
-        this.setResizable(true);
-        this.setVisible(true);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Añadir componentes gráficos a cada panel
+        panel1.add(new JLabel("Panel 1"));
+
+        // Añadir los cuatro paneles a la ventana principal
+        JPanel panel_juego = new JPanel();
+        JPanel panel_botones = new JPanel();
+        panel_juego.setLayout(new GridLayout(2, 2));
+        panel_juego.add(panel1);
+        panel_juego.add(panel2);
+        panel_juego.add(panel3);
+        panel_juego.add(panel4);
+        panel_botones.add(new JButton("Ayuda"));
+        panel_botones.add(new JButton("Comenzar"));
+
+
+        add(panel_botones, BorderLayout.SOUTH);
+
+        add(panel_juego, BorderLayout.CENTER);
+
+
+
+
+        // Mostrar la ventana principal
+        setVisible(true);
     }
 
-    /**
-     * This method is used to set up the default JComponent Configuration,
-     * create Listener and control Objects used for the GUI class
-     */
-    private void initGUI() {
-        //Set up JFrame Container's Layout
-        //Create Listener Object and Control Object
-        //Set up JComponents
-        headerProject = new Header("Header ...", Color.BLACK);
-
-        this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
-    }
-
-    /**
-     * Main process of the Java program
-     * @param args Object used in order to send input data from command line when
-     *             the program is execute by console.
-     */
-    public static void main(String[] args){
-        EventQueue.invokeLater(() -> {
-            GUI miProjectGUI = new GUI();
-        });
-    }
-
-    /**
-     * inner class that extends an Adapter Class or implements Listeners used by GUI class
-     */
-    private class Escucha {
-
+    public static void main(String[] args) {
+        GUI juego = new GUI();
     }
 }
