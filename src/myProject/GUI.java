@@ -6,9 +6,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * This class is used for ...
@@ -24,6 +22,11 @@ public class GUI extends JFrame {
     private Escucha escucha;
 
     private MoldelGeek modelGeek;
+
+    private JLabel[] dadosActivos = new JLabel[10];
+    private JLabel[] dadosInactivos = new JLabel[10];
+
+    private ImageIcon imagenDadoPorDefecto;
 
     private BufferedImage img;
     private JPanel panelDadosActivos;
@@ -55,7 +58,8 @@ public class GUI extends JFrame {
         panel1.setBorder(BorderFactory.createTitledBorder("Dados Activos"));
         JPanel panel2 = new JPanel();
         panel2.setBorder(BorderFactory.createTitledBorder("Dados Inactivos"));
-        JPanel panel3 = new JPanel();
+        JPanel panel3 = new JPanel(new BorderLayout());
+
         panel3.setBorder(BorderFactory.createTitledBorder("Tarjeta Puntuación"));
         JPanel panel4 = new JPanel();
         panel4.setBorder(BorderFactory.createTitledBorder("Dados Utilizados"));
@@ -79,7 +83,15 @@ public class GUI extends JFrame {
 
         }
 
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("Ronda");
+        modeloTabla.addColumn("Jugador 1");
+        modeloTabla.addColumn("Jugador 2");
+        JTable tabla = new JTable(modeloTabla);
+        JScrollPane scrollPane = new JScrollPane(tabla);
+        modeloTabla.addRow(new Object[]{"1", "5", "0"});
 
+        panel3.add(scrollPane, BorderLayout.CENTER);
         // Añadir componentes gráficos a cada panel
         //panel1.add(dado1);
         //panel1.add(dado2);
