@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,10 +17,13 @@ import java.io.IOException;
  */
 public class GUI extends JFrame {
     private Header headerProjec;
-    private JLabel[] dadosActivos = new JLabel[10];
-    private JLabel[] dadosInactivos = new JLabel[10];
+    private JLabel[] dadosLabel = new JLabel[10];
 
     private ImageIcon imagenDadoPorDefecto;
+
+    private Escucha escucha;
+
+    private MoldelGeek modelGeek;
 
     private BufferedImage img;
     private JPanel panelDadosActivos;
@@ -28,12 +33,15 @@ public class GUI extends JFrame {
 
     public GUI()
     {
+        modelGeek = new MoldelGeek();
         // Configurar la ventana principal
         headerProjec = new Header("Geets Out Master -- Game", Color.black);
         this.add(headerProjec, BorderLayout.NORTH);
         setTitle("Geek Masters");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        escucha = new Escucha();
 
 
         //dado2 = new JLabel(imagenDado);
@@ -56,22 +64,21 @@ public class GUI extends JFrame {
         // Dados por defecto.
         // ACTIVOS
         imagenDadoPorDefecto = new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/interrogante.png")).getImage().getScaledInstance(70,70, 1));
-        for (int i = 0; i < 7 ; i++)
+        for (int i = 0; i < 10 ; i++)
         {
-            dadosActivos[i] = new JLabel(imagenDadoPorDefecto);
-            dadosActivos[i].setPreferredSize(new Dimension(70,70));
-            dadosActivos[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-            panel1.add(dadosActivos[i]);
+            dadosLabel[i] = new JLabel(imagenDadoPorDefecto);
+            dadosLabel[i].setPreferredSize(new Dimension(70,70));
+            dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+            if (i < 7)
+            {
+                panel1.add(dadosLabel[i]);
+            }else
+            {
+                panel2.add(dadosLabel[i]);
+            }
+
         }
 
-        //INACTIVOS
-        for (int i = 0; i < 3 ; i++)
-        {
-            dadosInactivos[i] = new JLabel(imagenDadoPorDefecto);
-            dadosInactivos[i].setPreferredSize(new Dimension(70,70));
-            dadosInactivos[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-            panel2.add(dadosInactivos[i]);
-        }
 
         // Añadir componentes gráficos a cada panel
         //panel1.add(dado1);
@@ -85,8 +92,11 @@ public class GUI extends JFrame {
         panel_juego.add(panel2);
         panel_juego.add(panel3);
         panel_juego.add(panel4);
+        JButton botonComenzar = new JButton("Comenzar");
         panel_botones.add(new JButton("Ayuda"));
-        panel_botones.add(new JButton("Comenzar"));
+        panel_botones.add(botonComenzar);
+        botonComenzar.addActionListener(escucha);
+
 
 
         add(panel_botones, BorderLayout.SOUTH);
@@ -102,8 +112,23 @@ public class GUI extends JFrame {
 
     public static void main(String[] args)
     {
+        EventQueue.invokeLater(() -> {
+                GUI juego = new GUI();
+        });
 
-        GUI juego = new GUI();
-        MoldelGeek model = new MoldelGeek();
+    }
+
+    private  class Escucha implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            modelGeek.tiroInicial();
+            Dado[] dados = modelGeek.getDados();
+            for (int i = 0; i < 10 ; i++)
+            {
+                dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
+            }
+
+        }
     }
 }

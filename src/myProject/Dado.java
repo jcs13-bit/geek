@@ -10,10 +10,15 @@ public class Dado {
         estado = estadoInicial;
     }
 
-    public int getCara() {
+    public int tirarDado() {
         Random aleatorio = new Random();
         cara = aleatorio.nextInt(6)+1;
         this.asignarImagen();
+        return cara;
+    }
+
+    public int getCara()
+    {
         return cara;
     }
 
@@ -47,4 +52,17 @@ public class Dado {
 
         }
     }
+
+    public String getImagen()
+    {
+        return imagen;
+    }
+
+
+    public String getEstado()
+    {
+        return estado;
+    }
+
+
 }
