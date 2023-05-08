@@ -2,11 +2,8 @@ package myProject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * This class is used for ...
@@ -29,30 +26,29 @@ public class GUI extends JFrame {
     public GUI()
     {
         // Configurar la ventana principal
-        headerProjec = new Header("Geets Out Master -- Game", Color.black);
-        this.add(headerProjec, BorderLayout.NORTH);
         setTitle("Geek Masters");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
-        //dado2 = new JLabel(imagenDado);
-        //dado1.setPreferredSize(new Dimension(70,70));
-        //dado2.setPreferredSize(new Dimension(70,70));
-        //dado1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-        //dado2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-
-
+        // Crear los cuatro paneles y asignarles un título
         JPanel panel1 = new JPanel();
         panel1.setBorder(BorderFactory.createTitledBorder("Dados Activos"));
         JPanel panel2 = new JPanel();
         panel2.setBorder(BorderFactory.createTitledBorder("Dados Inactivos"));
-        JPanel panel3 = new JPanel();
+        JPanel panel3 = new JPanel(new BorderLayout());
+
         panel3.setBorder(BorderFactory.createTitledBorder("Tarjeta Puntuación"));
         JPanel panel4 = new JPanel();
         panel4.setBorder(BorderFactory.createTitledBorder("Dados Utilizados"));
         JPanel panel5 = new JPanel();
 
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("Ronda");
+        modeloTabla.addColumn("Jugador 1");
+        modeloTabla.addColumn("Jugador 2");
+        JTable tabla = new JTable(modeloTabla);
+        JScrollPane scrollPane = new JScrollPane(tabla);
+        modeloTabla.addRow(new Object[]{"1", "5", "0"});
         // Dados por defecto.
         // ACTIVOS
         imagenDadoPorDefecto = new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/interrogante.png")).getImage().getScaledInstance(70,70, 1));
@@ -73,6 +69,7 @@ public class GUI extends JFrame {
             panel2.add(dadosInactivos[i]);
         }
 
+        panel3.add(scrollPane, BorderLayout.CENTER);
         // Añadir componentes gráficos a cada panel
         //panel1.add(dado1);
         //panel1.add(dado2);
