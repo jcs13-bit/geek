@@ -169,6 +169,7 @@ public class GUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+
             modelGeek.tiroInicial();
             dados = modelGeek.getDados();
             for (int i = 0; i < 10 ; i++)
@@ -176,6 +177,9 @@ public class GUI extends JFrame {
                 dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
             }
             botonComenzar.setEnabled(false);
+            if (ronda > 1) {
+                escuchaDados.reubicarDados();
+            }
 
         }
     }
@@ -330,15 +334,30 @@ public class GUI extends JFrame {
                 modeloTabla.setValueAt(puntuacion, 0, 1);
                 modeloTabla.setValueAt(ronda, 0, 0);
                 botonComenzar.setEnabled(true);
-                modelGeek.tiroInicial();
-                for (int i = 0; i < 10 ; i++)
-                {
-                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
+                for (int i = 0; i < 10; i++) {
+                    dadosLabel[i].removeMouseListener(this);
                 }
-                botonComenzar.setEnabled(false);
-                revalidate();
-                repaint();
             }
+        }
+
+        public void reubicarDados(){
+            panel1.removeAll();
+            panel2.removeAll();
+            panel4.removeAll();
+
+            for (int i = 0; i < 10; i++) {
+                dadosLabel[i].setEnabled(true);
+                dadosLabel[i].addMouseListener(escuchaDados);
+                if (i < 7) {
+                    panel1.add(dadosLabel[i]);
+                    dados[i].setEstado("activo");
+                } else {
+                    panel2.add(dadosLabel[i]);
+                    dados[i].setEstado("inactivo");
+                }
+            }
+            revalidate();
+            repaint();
         }
 
 
