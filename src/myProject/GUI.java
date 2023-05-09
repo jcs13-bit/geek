@@ -368,19 +368,27 @@ public class GUI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            boolean dadoActivo = false;
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
                 {
                     dadoSeleccionado = i;
-                    modelGeek.accionMeeple(i);
-                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
-                    headerProjec.setText("Ahora sigue tirando!!");
+                    if (dados[i].getEstado() == "activo") {
+                        dadoActivo = true;
+                        modelGeek.accionMeeple(i);
+                        dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70, 70, 1)));
+                        headerProjec.setText("Ahora sigue jugando!!");
+                    }
                 }
-                dadosLabel[i].removeMouseListener(this);
-                dadosLabel[i].addMouseListener(escuchaDados);
+            }
+            if (dadoActivo == true)
+            {
+                for (int i = 0 ; i < dadosLabel.length ; i++) {
+                    dadosLabel[i].removeMouseListener(this);
+                    dadosLabel[i].addMouseListener(escuchaDados);
+                }
                 escuchaDados.validarEstado();
-
             }
         }
 
@@ -409,6 +417,7 @@ public class GUI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            boolean dadoActivo = false;
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
@@ -416,14 +425,15 @@ public class GUI extends JFrame {
                     dadoSeleccionado = i;
                     if (dados[i].getEstado() == "activo")
                     {
+                        dadoActivo = true;
                         dados[i].setEstado("inactivo");
-                        headerProjec.setText("Ahora sigue tirando!!");
+                        headerProjec.setText("Ahora sigue jugando!!");
                     }
 
 
                 }
             }
-            if (dados[dadoSeleccionado].getEstado() == "activo") {
+            if (dadoActivo == true) {
                 for (int i = 0 ; i < dadosLabel.length ; i++) {
                     dadosLabel[i].removeMouseListener(this);
                     dadosLabel[i].addMouseListener(escuchaDados);
@@ -458,22 +468,35 @@ public class GUI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            boolean dadoActivo = false;
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
                 {
-                    dadoSeleccionado = i;
-                    modelGeek.accionHeroe(dadoSeleccionado);
-                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
-                    headerProjec.setText("El dado ahora está en su opuesto");
+                        dadoSeleccionado = i;
+                    if (dados[i].getEstado() == "activo" ) {
+                        if (dados[i].getCara() == 3)
+                        {
+                            headerProjec.setText("No puedes voltear otro heroe");
+                            return;
+                        }
+                        dadoActivo = true;
+                        modelGeek.accionHeroe(dadoSeleccionado);
+                        dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70, 70, 1)));
+                        headerProjec.setText("El dado ahora está en su opuesto");
+                    }
                 }
-                dadosLabel[i].removeMouseListener(this);
-                dadosLabel[i].addMouseListener(escuchaDados);
-
-
             }
-            revalidate();
-            repaint();
+            if (dadoActivo == true)
+            {
+                for (int i = 0 ; i < dadosLabel.length ; i++) {
+                    dadosLabel[i].removeMouseListener(this);
+                    dadosLabel[i].addMouseListener(escuchaDados);
+                }
+                revalidate();
+                repaint();
+                escuchaDados.validarEstado();
+            }
         }
 
         @Override
