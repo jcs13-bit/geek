@@ -36,5 +36,10 @@ public class MoldelGeek {
         return dados;
     }
 
+    public void accionMeeple(int dadoSeleccionado)
+    {
+        dados[dadoSeleccionado].tirarDado();
+    }
+
 
 }
