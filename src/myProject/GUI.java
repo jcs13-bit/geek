@@ -4,7 +4,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 /**
  * This class is used for ...
@@ -83,7 +86,8 @@ public class GUI extends JFrame {
         panel_juego.add(panel2);
         panel_juego.add(panel3);
         panel_juego.add(panel4);
-        panel_botones.add(new JButton("Ayuda"));
+        JButton botonAyuda = new JButton("Ayuda");
+        panel_botones.add(botonAyuda);
         panel_botones.add(new JButton("Comenzar"));
 
 
@@ -96,6 +100,19 @@ public class GUI extends JFrame {
 
         // Mostrar la ventana principal
         setVisible(true);
+        //ventana de ayuda
+        /*JPanel panelAyuda = new JPanel();
+        getContentPane().add(panelAyuda, BorderLayout.CENTER);
+        panelAyuda.setVisible(false);*/
+
+        //mostrar ayuda
+        botonAyuda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ImageIcon imageAyuda = new ImageIcon(getClass().getResource("/resources/caras/ayuda.png"));
+                JOptionPane.showMessageDialog(rootPane, " ", "Ayuda", JOptionPane.PLAIN_MESSAGE, imageAyuda);
+            }
+        });
     }
 
     public static void main(String[] args)
