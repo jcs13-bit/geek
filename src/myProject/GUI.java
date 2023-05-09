@@ -341,6 +341,7 @@ public class GUI extends JFrame {
                 modeloTabla.setValueAt(puntuacion, 0, 1);
                 modeloTabla.setValueAt(ronda, 0, 0);
                 botonComenzar.setEnabled(true);
+                headerProjec.setText("Terminaste la ronda no quedan mas acciones . Vuelve a tirar los dados.");
                 for (int i = 0; i < 10; i++) {
                     dadosLabel[i].removeMouseListener(this);
                 }
@@ -351,7 +352,7 @@ public class GUI extends JFrame {
             panel1.removeAll();
             panel2.removeAll();
             panel4.removeAll();
-
+            headerProjec.setText("Usa alguna de tus acciones.");
             for (int i = 0; i < 10; i++) {
                 dadosLabel[i].setEnabled(true);
                 dadosLabel[i].addMouseListener(escuchaDados);
@@ -374,19 +375,27 @@ public class GUI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            boolean dadoActivo = false;
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
                 {
                     dadoSeleccionado = i;
-                    modelGeek.accionMeeple(i);
-                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
-                    headerProjec.setText("Ahora sigue tirando!!");
+                    if (dados[i].getEstado() == "activo") {
+                        dadoActivo = true;
+                        modelGeek.accionMeeple(i);
+                        dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70, 70, 1)));
+                        headerProjec.setText("Ahora sigue jugando!!");
+                    }
                 }
-                dadosLabel[i].removeMouseListener(this);
-                dadosLabel[i].addMouseListener(escuchaDados);
+            }
+            if (dadoActivo == true)
+            {
+                for (int i = 0 ; i < dadosLabel.length ; i++) {
+                    dadosLabel[i].removeMouseListener(this);
+                    dadosLabel[i].addMouseListener(escuchaDados);
+                }
                 escuchaDados.validarEstado();
-
             }
         }
 
@@ -415,22 +424,30 @@ public class GUI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            boolean dadoActivo = false;
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
                 {
                     dadoSeleccionado = i;
-                    dados[i].setEstado("inactivo");
-                    headerProjec.setText("Ahora sigue tirando!!");
+                    if (dados[i].getEstado() == "activo")
+                    {
+                        dadoActivo = true;
+                        dados[i].setEstado("inactivo");
+                        headerProjec.setText("Ahora sigue jugando!!");
+                    }
+
+
                 }
-                dadosLabel[i].removeMouseListener(this);
-                dadosLabel[i].addMouseListener(escuchaDados);
-
-
             }
-            escuchaDados.repaintDados();
-            escuchaDados.validarEstado();
-
+            if (dadoActivo == true) {
+                for (int i = 0 ; i < dadosLabel.length ; i++) {
+                    dadosLabel[i].removeMouseListener(this);
+                    dadosLabel[i].addMouseListener(escuchaDados);
+                }
+                escuchaDados.repaintDados();
+                escuchaDados.validarEstado();
+            }
         }
 
         @Override
@@ -458,22 +475,35 @@ public class GUI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            boolean dadoActivo = false;
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
                 {
-                    dadoSeleccionado = i;
-                    modelGeek.accionHeroe(dadoSeleccionado);
-                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
-                    headerProjec.setText("El dado ahora está en su opuesto");
+                        dadoSeleccionado = i;
+                    if (dados[i].getEstado() == "activo" ) {
+                        if (dados[i].getCara() == 3)
+                        {
+                            headerProjec.setText("No puedes voltear otro heroe");
+                            return;
+                        }
+                        dadoActivo = true;
+                        modelGeek.accionHeroe(dadoSeleccionado);
+                        dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70, 70, 1)));
+                        headerProjec.setText("El dado ahora está en su opuesto");
+                    }
                 }
-                dadosLabel[i].removeMouseListener(this);
-                dadosLabel[i].addMouseListener(escuchaDados);
-
-
             }
-            revalidate();
-            repaint();
+            if (dadoActivo == true)
+            {
+                for (int i = 0 ; i < dadosLabel.length ; i++) {
+                    dadosLabel[i].removeMouseListener(this);
+                    dadosLabel[i].addMouseListener(escuchaDados);
+                }
+                revalidate();
+                repaint();
+                escuchaDados.validarEstado();
+            }
         }
 
         @Override
