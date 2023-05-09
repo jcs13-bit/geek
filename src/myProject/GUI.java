@@ -44,6 +44,9 @@ public class GUI extends JFrame {
     private int ronda;
 
     private AccionMeeple accionMeeple;
+    private AccionCohete accionCohete;
+
+    private DefaultTableModel modeloTabla;
     private AccionHeroe accionHeroe;
 
     public GUI()
@@ -52,6 +55,7 @@ public class GUI extends JFrame {
         /* Inicia la primera ronda */
         ronda = 1;
         accionMeeple = new AccionMeeple();
+        accionCohete = new AccionCohete();
         accionHeroe = new AccionHeroe();
         modelGeek = new MoldelGeek();
         // Configurar la ventana principal
@@ -97,10 +101,9 @@ public class GUI extends JFrame {
         panel1.setFocusable(true);
         panel2.setFocusable(true);
 
-        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla = new DefaultTableModel();
         modeloTabla.addColumn("Ronda");
-        modeloTabla.addColumn("Jugador 1");
-        modeloTabla.addColumn("Jugador 2");
+        modeloTabla.addColumn("Puntuación.");
         JTable tabla = new JTable(modeloTabla);
         tabla.setDefaultEditor(Object.class, null);
 
@@ -202,9 +205,10 @@ public class GUI extends JFrame {
                 dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
                 if (dadosLabel[i] == e.getSource())
                 {
+                    dadoSeleccionado = i;
                     if (dados[i].getEstado() == "activo")
                     {
-                        dadoSeleccionado = i;
+
                         dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
                         headerProjec.setText(dados[i].getNombre());
 
@@ -213,31 +217,35 @@ public class GUI extends JFrame {
                     }
                 }
             }
-            Object[] options = {"Aceptar", "Cancelar"};
-            int option = JOptionPane.showOptionDialog(null,
-                    "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
-                    JOptionPane.PLAIN_MESSAGE,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
-            if (option == 0)
+            if (dados[dadoSeleccionado].getEstado() == "activo")
             {
+                Object[] options = {"Aceptar", "Cancelar"};
+                int option = JOptionPane.showOptionDialog(null,
+                        "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+                if (option == 0) {
 
-                switch (dados[dadoSeleccionado].getCara())
-                {
-                    /* ACCION MEEPLE */
-                    case 1:
-                        headerProjec.setText("vuelve a Lanzar uno de los dados activos");
-                        for (int i = 0 ; i < dadosLabel.length ; i++)
-                        {
-                            dadosLabel[i].removeMouseListener(this);
-                            dadosLabel[i].addMouseListener(accionMeeple);
-                        }
-                        break;
+                    switch (dados[dadoSeleccionado].getCara()) {
+                        /* ACCION MEEPLE */
+                        case 1:
+                            headerProjec.setText("vuelve a Lanzar uno de los dados activos");
+                            for (int i = 0; i < dadosLabel.length; i++) {
+                                dadosLabel[i].removeMouseListener(this);
+                                dadosLabel[i].addMouseListener(accionMeeple);
+                            }
+                            break;
 
-                    case 2:
-                        break;
+                        case 2:
+                            headerProjec.setText("Elimina uno de los dados activos enviándolo a la sección inactivos.");
+                            for (int i = 0; i < dadosLabel.length; i++) {
+                                dadosLabel[i].removeMouseListener(this);
+                                dadosLabel[i].addMouseListener(accionCohete);
+                            }
+                            break;
 
                     case 3:
                         headerProjec.setText("voltea el dado a su cara opuesta");
@@ -248,26 +256,24 @@ public class GUI extends JFrame {
                         }
                         break;
 
-                    case 4:
-                        break;
+                        case 4:
+                            break;
 
-                    case 5:
-                        break;
+                        case 5:
+                            break;
 
-                    case 6:
-                        break;
+                        case 6:
+                            break;
 
-                }
-                if (dados[dadoSeleccionado].getCara() != 6 || dados[dadoSeleccionado].getCara() != 5)
-                {
-                    dados[dadoSeleccionado].setEstado("usado");
-                    panel1.removeAll();
-                    panel2.removeAll();
-                    panel4.removeAll();
-                    repaintDados();
-                    revalidate();
-                    repaint();
+                    }
+                    if (dados[dadoSeleccionado].getCara() != 6 || dados[dadoSeleccionado].getCara() != 5) {
+                        dados[dadoSeleccionado].setEstado("usado");
+                        panel1.removeAll();
+                        panel2.removeAll();
+                        panel4.removeAll();
+                        repaintDados();
 
+                    }
                 }
             }
         }
@@ -292,7 +298,8 @@ public class GUI extends JFrame {
             e.getComponent().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
-        public void repaintDados() {
+        public void repaintDados()
+        {
             for (int i = 0; i < dados.length ; i++)
             {
                 if (dados[i].getEstado() == "activo")
@@ -309,8 +316,33 @@ public class GUI extends JFrame {
                     panel4.add(dadosLabel[i]);
                 }
             }
+            revalidate();
+            repaint();
 
         }
+
+        public void validarEstado()
+        {
+            String estado = modelGeek.validarEstado();
+            if (estado == "sin acciones")
+            {
+                int puntuacion = modelGeek.validarPuntuacion();
+                ronda++;
+                modeloTabla.setValueAt(puntuacion, 0, 1);
+                modeloTabla.setValueAt(ronda, 0, 0);
+                botonComenzar.setEnabled(true);
+                modelGeek.tiroInicial();
+                for (int i = 0; i < 10 ; i++)
+                {
+                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
+                }
+                botonComenzar.setEnabled(false);
+                revalidate();
+                repaint();
+            }
+        }
+
+
     }
 
     private class AccionMeeple implements MouseListener{
@@ -328,9 +360,52 @@ public class GUI extends JFrame {
                 }
                 dadosLabel[i].removeMouseListener(this);
                 dadosLabel[i].addMouseListener(escuchaDados);
+                escuchaDados.validarEstado();
+
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+    private class AccionCohete implements MouseListener{
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            for (int i = 0 ; i < dadosLabel.length ; i++)
+            {
+                if (dadosLabel[i] == e.getSource())
+                {
+                    dadoSeleccionado = i;
+                    dados[i].setEstado("inactivo");
+                    headerProjec.setText("Ahora sigue tirando!!");
+                }
+                dadosLabel[i].removeMouseListener(this);
+                dadosLabel[i].addMouseListener(escuchaDados);
 
 
             }
+            escuchaDados.repaintDados();
+            escuchaDados.validarEstado();
+
         }
 
         @Override
