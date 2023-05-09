@@ -45,6 +45,7 @@ public class GUI extends JFrame {
 
     private AccionMeeple accionMeeple;
     private AccionCohete accionCohete;
+    private AccionCorazon accionCorazon;
 
     private DefaultTableModel modeloTabla;
     private AccionHeroe accionHeroe;
@@ -57,6 +58,7 @@ public class GUI extends JFrame {
         accionMeeple = new AccionMeeple();
         accionCohete = new AccionCohete();
         accionHeroe = new AccionHeroe();
+        accionCorazon = new AccionCorazon();
         modelGeek = new MoldelGeek();
         // Configurar la ventana principal
         headerProjec = new Header("Geets Out Master -- Game", Color.black);
@@ -238,7 +240,7 @@ public class GUI extends JFrame {
                                 dadosLabel[i].addMouseListener(accionMeeple);
                             }
                             break;
-
+                        /* ACCION COHETE */
                         case 2:
                             headerProjec.setText("Elimina uno de los dados activos enviándolo a la sección inactivos.");
                             for (int i = 0; i < dadosLabel.length; i++) {
@@ -246,7 +248,7 @@ public class GUI extends JFrame {
                                 dadosLabel[i].addMouseListener(accionCohete);
                             }
                             break;
-
+                        /* ACCION HEROE */
                     case 3:
                         headerProjec.setText("voltea el dado a su cara opuesta");
                         for (int i = 0 ; i < dadosLabel.length ; i++)
@@ -255,8 +257,13 @@ public class GUI extends JFrame {
                             dadosLabel[i].addMouseListener(accionHeroe);
                         }
                         break;
-
+                        /* ACCION CORAZON */
                         case 4:
+                            headerProjec.setText("Elimina uno de los dados inactivos enviándolo a la sección de dados activos.");
+                            for (int i = 0; i < dadosLabel.length; i++) {
+                                dadosLabel[i].removeMouseListener(this);
+                                dadosLabel[i].addMouseListener(accionCorazon);
+                            }
                             break;
 
                         case 5:
@@ -449,6 +456,49 @@ public class GUI extends JFrame {
             }
             revalidate();
             repaint();
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+    private class AccionCorazon implements MouseListener{
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            for (int i = 0 ; i < dadosLabel.length ; i++)
+            {
+                if (dadosLabel[i] == e.getSource())
+                {
+                    dadoSeleccionado = i;
+                    dados[i].setEstado("activo");
+                    headerProjec.setText("Ahora sigue tirando!!");
+                }
+                dadosLabel[i].removeMouseListener(this);
+                dadosLabel[i].addMouseListener(escuchaDados);
+
+
+            }
+            escuchaDados.repaintDados();
+            escuchaDados.validarEstado();
+
         }
 
         @Override
