@@ -93,6 +93,10 @@ public class Dado {
     {
         estado = nuevoEstado;
     }
-
+    public void setCara(int nuevoCara)
+    {
+        cara = nuevoCara;
+        asignarImagen();
+    }
 
 }

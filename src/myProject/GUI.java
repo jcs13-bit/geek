@@ -44,6 +44,7 @@ public class GUI extends JFrame {
     private int ronda;
 
     private AccionMeeple accionMeeple;
+    private AccionHeroe accionHeroe;
 
     public GUI()
     {
@@ -51,6 +52,7 @@ public class GUI extends JFrame {
         /* Inicia la primera ronda */
         ronda = 1;
         accionMeeple = new AccionMeeple();
+        accionHeroe = new AccionHeroe();
         modelGeek = new MoldelGeek();
         // Configurar la ventana principal
         headerProjec = new Header("Geets Out Master -- Game", Color.black);
@@ -238,6 +240,12 @@ public class GUI extends JFrame {
                         break;
 
                     case 3:
+                        headerProjec.setText("voltea el dado a su cara opuesta");
+                        for (int i = 0 ; i < dadosLabel.length ; i++)
+                        {
+                            dadosLabel[i].removeMouseListener(this);
+                            dadosLabel[i].addMouseListener(accionHeroe);
+                        }
                         break;
 
                     case 4:
@@ -323,6 +331,49 @@ public class GUI extends JFrame {
 
 
             }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+    private class AccionHeroe implements MouseListener
+    {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            for (int i = 0 ; i < dadosLabel.length ; i++)
+            {
+                if (dadosLabel[i] == e.getSource())
+                {
+                    dadoSeleccionado = i;
+                    modelGeek.accionHeroe(dadoSeleccionado);
+                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
+                    headerProjec.setText("El dado ahora está en su opuesto");
+                }
+                dadosLabel[i].removeMouseListener(this);
+                dadosLabel[i].addMouseListener(escuchaDados);
+
+
+            }
+            revalidate();
+            repaint();
         }
 
         @Override
