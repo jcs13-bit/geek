@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 /**
  * This class is used for ...
@@ -110,7 +114,6 @@ public class GUI extends JFrame {
         botonAyuda.setFocusable(false);
 
 
-
         add(panel_botones, BorderLayout.SOUTH);
 
         add(panel_juego, BorderLayout.CENTER);
@@ -120,6 +123,19 @@ public class GUI extends JFrame {
 
         // Mostrar la ventana principal
         setVisible(true);
+        //ventana de ayuda
+        /*JPanel panelAyuda = new JPanel();
+        getContentPane().add(panelAyuda, BorderLayout.CENTER);
+        panelAyuda.setVisible(false);*/
+
+        //mostrar ayuda
+        botonAyuda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ImageIcon imageAyuda = new ImageIcon(getClass().getResource("/resources/caras/ayuda.png"));
+                JOptionPane.showMessageDialog(rootPane, " ", "Ayuda", JOptionPane.PLAIN_MESSAGE, imageAyuda);
+            }
+        });
     }
 
     public void procesarSeleccion()
