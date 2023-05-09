@@ -223,6 +223,11 @@ public class GUI extends JFrame {
             }
             if (dados[dadoSeleccionado].getEstado() == "activo")
             {
+                if(dados[dadoSeleccionado].getCara() == 5 || dados[dadoSeleccionado].getCara() == 6)
+                {
+                    headerProjec.setText("El dado seleccionado no tiene funcionalidad especial");
+                    return;
+                }
                 Object[] options = {"Aceptar", "Cancelar"};
                 int option = JOptionPane.showOptionDialog(null,
                         "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
@@ -261,12 +266,6 @@ public class GUI extends JFrame {
                         break;
 
                         case 4:
-                            break;
-
-                        case 5:
-                            break;
-
-                        case 6:
                             break;
 
                     }
