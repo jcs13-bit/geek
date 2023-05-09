@@ -1,6 +1,7 @@
 package myProject;
 
 import javax.imageio.ImageIO;
+import javax.management.modelmbean.ModelMBean;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class GUI extends JFrame {
     private Escucha escucha;
 
     private EscuchaDados escuchaDados;
-
+    private int dadoSeleccionado;
     private MoldelGeek modelGeek;
 
 
@@ -121,6 +122,11 @@ public class GUI extends JFrame {
         setVisible(true);
     }
 
+    public void procesarSeleccion()
+    {
+        System.out.println("procesando Selección");
+    }
+
     public static void main(String[] args)
     {
         EventQueue.invokeLater(() -> {
@@ -170,8 +176,27 @@ public class GUI extends JFrame {
                 {
                     if (dados[i].getEstado() == "activo")
                     {
+                        dadoSeleccionado = i;
                         dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
                         headerProjec.setText(dados[i].getNombre() + " :" + dados[i].getInstruccion() );
+                        Object[] options = {"Aceptar", "Cancelar"};
+                        int option = JOptionPane.showOptionDialog(null,
+                                "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
+                                JOptionPane.PLAIN_MESSAGE,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                options,
+                                options[0]);
+                        if (option == 0)
+                        {
+                            switch (dadoSeleccionado)
+                            {
+                                    case 1:
+                                    //dadosLabel[0].addMouseMotionListener();
+                                    break;
+                            }
+                        }
+
                     }else{
                         headerProjec.setText("Para usar un dado debes escogerlo de entre los activos.");
                     }
