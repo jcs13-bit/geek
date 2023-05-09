@@ -46,6 +46,8 @@ public class GUI extends JFrame {
     private AccionMeeple accionMeeple;
     private AccionCohete accionCohete;
 
+    private DefaultTableModel modeloTabla;
+
     public GUI()
     {
 
@@ -97,10 +99,9 @@ public class GUI extends JFrame {
         panel1.setFocusable(true);
         panel2.setFocusable(true);
 
-        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla = new DefaultTableModel();
         modeloTabla.addColumn("Ronda");
-        modeloTabla.addColumn("Jugador 1");
-        modeloTabla.addColumn("Jugador 2");
+        modeloTabla.addColumn("Puntuación.");
         JTable tabla = new JTable(modeloTabla);
         tabla.setDefaultEditor(Object.class, null);
 
@@ -289,7 +290,8 @@ public class GUI extends JFrame {
             e.getComponent().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
-        public void repaintDados() {
+        public void repaintDados()
+        {
             for (int i = 0; i < dados.length ; i++)
             {
                 if (dados[i].getEstado() == "activo")
@@ -310,13 +312,35 @@ public class GUI extends JFrame {
             repaint();
 
         }
+
+        public void validarEstado()
+        {
+            String estado = modelGeek.validarEstado();
+            if (estado == "sin acciones")
+            {
+                int puntuacion = modelGeek.validarPuntuacion();
+                ronda++;
+                modeloTabla.setValueAt(puntuacion, 0, 1);
+                modeloTabla.setValueAt(ronda, 0, 0);
+                botonComenzar.setEnabled(true);
+                modelGeek.tiroInicial();
+                for (int i = 0; i < 10 ; i++)
+                {
+                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
+                }
+                botonComenzar.setEnabled(false);
+                revalidate();
+                repaint();
+            }
+        }
+
+
     }
 
     private class AccionMeeple implements MouseListener{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println("hola amigos de youtube");
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
@@ -328,7 +352,7 @@ public class GUI extends JFrame {
                 }
                 dadosLabel[i].removeMouseListener(this);
                 dadosLabel[i].addMouseListener(escuchaDados);
-
+                escuchaDados.validarEstado();
 
             }
         }
@@ -372,6 +396,7 @@ public class GUI extends JFrame {
 
             }
             escuchaDados.repaintDados();
+            escuchaDados.validarEstado();
 
         }
 
