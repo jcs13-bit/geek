@@ -41,6 +41,28 @@ public class MoldelGeek {
     {
         dados[dadoSeleccionado].tirarDado();
     }
+    public void accionHeroe(int dadoSeleccionado) {
+        switch (dados[dadoSeleccionado].getCara()){
+            case 1:
+                dados[dadoSeleccionado].setCara(2);
+                break;
+            case 2:
+                dados[dadoSeleccionado].setCara(1);
+                break;
+            case 3:
+                dados[dadoSeleccionado].setCara(5);
+                break;
+            case 5:
+                dados[dadoSeleccionado].setCara(3);
+                break;
+            case 4:
+                dados[dadoSeleccionado].setCara(6);
+                break;
+            case 6:
+                dados[dadoSeleccionado].setCara(4);
+                break;
+        }
+    }
 
     public String validarEstado()
     {
