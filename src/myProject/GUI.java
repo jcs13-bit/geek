@@ -44,6 +44,7 @@ public class GUI extends JFrame {
     private int ronda;
 
     private AccionMeeple accionMeeple;
+    private AccionCohete accionCohete;
 
     public GUI()
     {
@@ -51,6 +52,7 @@ public class GUI extends JFrame {
         /* Inicia la primera ronda */
         ronda = 1;
         accionMeeple = new AccionMeeple();
+        accionCohete = new AccionCohete();
         modelGeek = new MoldelGeek();
         // Configurar la ventana principal
         headerProjec = new Header("Geets Out Master -- Game", Color.black);
@@ -200,9 +202,10 @@ public class GUI extends JFrame {
                 dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
                 if (dadosLabel[i] == e.getSource())
                 {
+                    dadoSeleccionado = i;
                     if (dados[i].getEstado() == "activo")
                     {
-                        dadoSeleccionado = i;
+
                         dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
                         headerProjec.setText(dados[i].getNombre());
 
@@ -211,55 +214,57 @@ public class GUI extends JFrame {
                     }
                 }
             }
-            Object[] options = {"Aceptar", "Cancelar"};
-            int option = JOptionPane.showOptionDialog(null,
-                    "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
-                    JOptionPane.PLAIN_MESSAGE,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
-            if (option == 0)
+            if (dados[dadoSeleccionado].getEstado() == "activo")
             {
+                Object[] options = {"Aceptar", "Cancelar"};
+                int option = JOptionPane.showOptionDialog(null,
+                        "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+                if (option == 0) {
 
-                switch (dados[dadoSeleccionado].getCara())
-                {
-                    /* ACCION MEEPLE */
-                    case 1:
-                        headerProjec.setText("vuelve a Lanzar uno de los dados activos");
-                        for (int i = 0 ; i < dadosLabel.length ; i++)
-                        {
-                            dadosLabel[i].removeMouseListener(this);
-                            dadosLabel[i].addMouseListener(accionMeeple);
-                        }
-                        break;
+                    switch (dados[dadoSeleccionado].getCara()) {
+                        /* ACCION MEEPLE */
+                        case 1:
+                            headerProjec.setText("vuelve a Lanzar uno de los dados activos");
+                            for (int i = 0; i < dadosLabel.length; i++) {
+                                dadosLabel[i].removeMouseListener(this);
+                                dadosLabel[i].addMouseListener(accionMeeple);
+                            }
+                            break;
 
-                    case 2:
-                        break;
+                        case 2:
+                            headerProjec.setText("Elimina uno de los dados activos enviándolo a la sección inactivos.");
+                            for (int i = 0; i < dadosLabel.length; i++) {
+                                dadosLabel[i].removeMouseListener(this);
+                                dadosLabel[i].addMouseListener(accionCohete);
+                            }
+                            break;
 
-                    case 3:
-                        break;
+                        case 3:
+                            break;
 
-                    case 4:
-                        break;
+                        case 4:
+                            break;
 
-                    case 5:
-                        break;
+                        case 5:
+                            break;
 
-                    case 6:
-                        break;
+                        case 6:
+                            break;
 
-                }
-                if (dados[dadoSeleccionado].getCara() != 6 || dados[dadoSeleccionado].getCara() != 5)
-                {
-                    dados[dadoSeleccionado].setEstado("usado");
-                    panel1.removeAll();
-                    panel2.removeAll();
-                    panel4.removeAll();
-                    repaintDados();
-                    revalidate();
-                    repaint();
+                    }
+                    if (dados[dadoSeleccionado].getCara() != 6 || dados[dadoSeleccionado].getCara() != 5) {
+                        dados[dadoSeleccionado].setEstado("usado");
+                        panel1.removeAll();
+                        panel2.removeAll();
+                        panel4.removeAll();
+                        repaintDados();
 
+                    }
                 }
             }
         }
@@ -301,6 +306,8 @@ public class GUI extends JFrame {
                     panel4.add(dadosLabel[i]);
                 }
             }
+            revalidate();
+            repaint();
 
         }
     }
@@ -309,6 +316,7 @@ public class GUI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            System.out.println("hola amigos de youtube");
             for (int i = 0 ; i < dadosLabel.length ; i++)
             {
                 if (dadosLabel[i] == e.getSource())
@@ -323,6 +331,48 @@ public class GUI extends JFrame {
 
 
             }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+    private class AccionCohete implements MouseListener{
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            for (int i = 0 ; i < dadosLabel.length ; i++)
+            {
+                if (dadosLabel[i] == e.getSource())
+                {
+                    dadoSeleccionado = i;
+                    dados[i].setEstado("inactivo");
+                    headerProjec.setText("Ahora sigue tirando!!");
+                }
+                dadosLabel[i].removeMouseListener(this);
+                dadosLabel[i].addMouseListener(escuchaDados);
+
+
+            }
+            escuchaDados.repaintDados();
+
         }
 
         @Override
