@@ -42,7 +42,7 @@ public class Dado {
 
             case 3:
                 imagen = "super_herue.png";
-                nombre = "Super Herue";
+                nombre = "Super Heroe";
                 instruccion = "Voltea un dado de la selección de activos.";
                 break;
 
@@ -85,7 +85,13 @@ public class Dado {
 
     public String getInstruccion()
     {
+
         return estado;
+    }
+
+    public void setEstado(String nuevoEstado)
+    {
+        estado = nuevoEstado;
     }
 
 

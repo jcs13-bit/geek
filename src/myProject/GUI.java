@@ -34,12 +34,23 @@ public class GUI extends JFrame {
 
 
     private JPanel panel1;
-    private JPanel panelDadosInactivos;
-    private JPanel panelDadosUtilizados;
+    private JPanel panel2;
+    private JPanel panel3;
+    private JPanel panel4;
     private JPanel panelMarcadorPuntaje;
+
+    private JButton botonComenzar;
+
+    private int ronda;
+
+    private AccionMeeple accionMeeple;
 
     public GUI()
     {
+
+        /* Inicia la primera ronda */
+        ronda = 1;
+        accionMeeple = new AccionMeeple();
         modelGeek = new MoldelGeek();
         // Configurar la ventana principal
         headerProjec = new Header("Geets Out Master -- Game", Color.black);
@@ -53,12 +64,12 @@ public class GUI extends JFrame {
 
         panel1 = new JPanel();
         panel1.setBorder(BorderFactory.createTitledBorder("Dados Activos"));
-        JPanel panel2 = new JPanel();
+        panel2 = new JPanel();
         panel2.setBorder(BorderFactory.createTitledBorder("Dados Inactivos"));
-        JPanel panel3 = new JPanel(new BorderLayout());
+        panel3 = new JPanel(new BorderLayout());
 
         panel3.setBorder(BorderFactory.createTitledBorder("Tarjeta Puntuación"));
-        JPanel panel4 = new JPanel();
+        panel4 = new JPanel();
         panel4.setBorder(BorderFactory.createTitledBorder("Dados Utilizados"));
         JPanel panel5 = new JPanel();
 
@@ -89,8 +100,10 @@ public class GUI extends JFrame {
         modeloTabla.addColumn("Jugador 1");
         modeloTabla.addColumn("Jugador 2");
         JTable tabla = new JTable(modeloTabla);
+        tabla.setDefaultEditor(Object.class, null);
+
         JScrollPane scrollPane = new JScrollPane(tabla);
-        modeloTabla.addRow(new Object[]{"1", "5", "0"});
+        modeloTabla.addRow(new Object[]{ronda, "0", "0"});
 
         panel3.add(scrollPane, BorderLayout.CENTER);
         // Añadir componentes gráficos a cada panel
@@ -105,7 +118,7 @@ public class GUI extends JFrame {
         panel_juego.add(panel2);
         panel_juego.add(panel3);
         panel_juego.add(panel4);
-        JButton botonComenzar = new JButton("Lanzar dados");
+        botonComenzar = new JButton("Lanzar dados");
         JButton botonAyuda = new JButton("Ayuda");
         panel_botones.add(botonAyuda);
         panel_botones.add(botonComenzar);
@@ -138,10 +151,6 @@ public class GUI extends JFrame {
         });
     }
 
-    public void procesarSeleccion()
-    {
-        System.out.println("procesando Selección");
-    }
 
     public static void main(String[] args)
     {
@@ -161,6 +170,7 @@ public class GUI extends JFrame {
             {
                 dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
             }
+            botonComenzar.setEnabled(false);
 
         }
     }
@@ -194,35 +204,69 @@ public class GUI extends JFrame {
                     {
                         dadoSeleccionado = i;
                         dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-                        headerProjec.setText(dados[i].getNombre() + " :" + dados[i].getInstruccion() );
-                        Object[] options = {"Aceptar", "Cancelar"};
-                        int option = JOptionPane.showOptionDialog(null,
-                                "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
-                                JOptionPane.PLAIN_MESSAGE,
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                options,
-                                options[0]);
-                        if (option == 0)
-                        {
-                            switch (dadoSeleccionado)
-                            {
-                                    case 1:
-                                    //dadosLabel[0].addMouseMotionListener();
-                                    break;
-                            }
-                        }
+                        headerProjec.setText(dados[i].getNombre());
 
                     }else{
                         headerProjec.setText("Para usar un dado debes escogerlo de entre los activos.");
                     }
                 }
             }
+            Object[] options = {"Aceptar", "Cancelar"};
+            int option = JOptionPane.showOptionDialog(null,
+                    "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
+                    JOptionPane.PLAIN_MESSAGE,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+            if (option == 0)
+            {
+
+                switch (dados[dadoSeleccionado].getCara())
+                {
+                    /* ACCION MEEPLE */
+                    case 1:
+                        headerProjec.setText("vuelve a Lanzar uno de los dados activos");
+                        for (int i = 0 ; i < dadosLabel.length ; i++)
+                        {
+                            dadosLabel[i].removeMouseListener(this);
+                            dadosLabel[i].addMouseListener(accionMeeple);
+                        }
+                        break;
+
+                    case 2:
+                        break;
+
+                    case 3:
+                        break;
+
+                    case 4:
+                        break;
+
+                    case 5:
+                        break;
+
+                    case 6:
+                        break;
+
+                }
+                if (dados[dadoSeleccionado].getCara() != 6 || dados[dadoSeleccionado].getCara() != 5)
+                {
+                    dados[dadoSeleccionado].setEstado("usado");
+                    panel1.removeAll();
+                    panel2.removeAll();
+                    panel4.removeAll();
+                    repaintDados();
+                    revalidate();
+                    repaint();
+
+                }
+            }
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            System.out.println("aja men");
+
         }
 
         @Override
@@ -238,6 +282,67 @@ public class GUI extends JFrame {
         @Override
         public void mouseExited(MouseEvent e) {
             e.getComponent().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+
+        public void repaintDados() {
+            for (int i = 0; i < dados.length ; i++)
+            {
+                if (dados[i].getEstado() == "activo")
+                {
+                    panel1.add(dadosLabel[i]);
+                }
+                if (dados[i].getEstado() == "inactivo")
+                {
+                    panel2.add(dadosLabel[i]);
+                }
+                if (dados[i].getEstado() == "usado")
+                {
+                    dadosLabel[i].setEnabled(false);
+                    panel4.add(dadosLabel[i]);
+                }
+            }
+
+        }
+    }
+
+    private class AccionMeeple implements MouseListener{
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            for (int i = 0 ; i < dadosLabel.length ; i++)
+            {
+                if (dadosLabel[i] == e.getSource())
+                {
+                    dadoSeleccionado = i;
+                    modelGeek.accionMeeple(i);
+                    dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
+                    headerProjec.setText("Ahora sigue tirando!!");
+                }
+                dadosLabel[i].removeMouseListener(this);
+                dadosLabel[i].addMouseListener(escuchaDados);
+
+
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
         }
     }
 
