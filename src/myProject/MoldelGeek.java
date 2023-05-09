@@ -41,6 +41,10 @@ public class MoldelGeek {
     {
         dados[dadoSeleccionado].tirarDado();
     }
+    public void accionCorazon(int dadoSeleccionado)
+    {
+        dados[dadoSeleccionado].tirarDado();
+    }
     public void accionHeroe(int dadoSeleccionado) {
         switch (dados[dadoSeleccionado].getCara()){
             case 1:
