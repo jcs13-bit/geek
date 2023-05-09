@@ -1,9 +1,13 @@
 package myProject;
 
 import javax.imageio.ImageIO;
+import javax.management.modelmbean.ModelMBean;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.Map;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -16,26 +20,38 @@ import java.util.Objects;
  */
 public class GUI extends JFrame {
     private Header headerProjec;
-    private JLabel[] dadosActivos = new JLabel[10];
-    private JLabel[] dadosInactivos = new JLabel[10];
+    private JLabel[] dadosLabel = new JLabel[10];
 
     private ImageIcon imagenDadoPorDefecto;
 
-    private BufferedImage img;
-    private JPanel panelDadosActivos;
+    private Dado[] dados = new Dado[10];
+
+    private Escucha escucha;
+
+    private EscuchaDados escuchaDados;
+    private int dadoSeleccionado;
+    private MoldelGeek modelGeek;
+
+
+    private JPanel panel1;
     private JPanel panelDadosInactivos;
     private JPanel panelDadosUtilizados;
     private JPanel panelMarcadorPuntaje;
 
     public GUI()
     {
+        modelGeek = new MoldelGeek();
         // Configurar la ventana principal
+        headerProjec = new Header("Geets Out Master -- Game", Color.black);
+        this.add(headerProjec, BorderLayout.NORTH);
         setTitle("Geek Masters");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Crear los cuatro paneles y asignarles un título
-        JPanel panel1 = new JPanel();
+        escucha = new Escucha();
+        escuchaDados = new EscuchaDados();
+
+        panel1 = new JPanel();
         panel1.setBorder(BorderFactory.createTitledBorder("Dados Activos"));
         JPanel panel2 = new JPanel();
         panel2.setBorder(BorderFactory.createTitledBorder("Dados Inactivos"));
@@ -46,6 +62,28 @@ public class GUI extends JFrame {
         panel4.setBorder(BorderFactory.createTitledBorder("Dados Utilizados"));
         JPanel panel5 = new JPanel();
 
+        // Dados por defecto.
+        // ACTIVOS
+        imagenDadoPorDefecto = new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/interrogante.png")).getImage().getScaledInstance(70,70, 1));
+        for (int i = 0; i < 10 ; i++)
+        {
+            dadosLabel[i] = new JLabel(imagenDadoPorDefecto);
+            dadosLabel[i].setPreferredSize(new Dimension(70,70));
+            dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+            if (i < 7)
+            {
+                panel1.add(dadosLabel[i]);
+            }else
+            {
+                panel2.add(dadosLabel[i]);
+            }
+            dadosLabel[i].addMouseMotionListener(escuchaDados);
+            dadosLabel[i].addMouseListener(escuchaDados);
+
+        }
+        panel1.setFocusable(true);
+        panel2.setFocusable(true);
+
         DefaultTableModel modeloTabla = new DefaultTableModel();
         modeloTabla.addColumn("Ronda");
         modeloTabla.addColumn("Jugador 1");
@@ -53,25 +91,6 @@ public class GUI extends JFrame {
         JTable tabla = new JTable(modeloTabla);
         JScrollPane scrollPane = new JScrollPane(tabla);
         modeloTabla.addRow(new Object[]{"1", "5", "0"});
-        // Dados por defecto.
-        // ACTIVOS
-        imagenDadoPorDefecto = new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/interrogante.png")).getImage().getScaledInstance(70,70, 1));
-        for (int i = 0; i < 7 ; i++)
-        {
-            dadosActivos[i] = new JLabel(imagenDadoPorDefecto);
-            dadosActivos[i].setPreferredSize(new Dimension(70,70));
-            dadosActivos[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-            panel1.add(dadosActivos[i]);
-        }
-
-        //INACTIVOS
-        for (int i = 0; i < 3 ; i++)
-        {
-            dadosInactivos[i] = new JLabel(imagenDadoPorDefecto);
-            dadosInactivos[i].setPreferredSize(new Dimension(70,70));
-            dadosInactivos[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-            panel2.add(dadosInactivos[i]);
-        }
 
         panel3.add(scrollPane, BorderLayout.CENTER);
         // Añadir componentes gráficos a cada panel
@@ -86,9 +105,13 @@ public class GUI extends JFrame {
         panel_juego.add(panel2);
         panel_juego.add(panel3);
         panel_juego.add(panel4);
+        JButton botonComenzar = new JButton("Lanzar dados");
         JButton botonAyuda = new JButton("Ayuda");
         panel_botones.add(botonAyuda);
-        panel_botones.add(new JButton("Comenzar"));
+        panel_botones.add(botonComenzar);
+        botonComenzar.addActionListener(escucha);
+        botonComenzar.setFocusable(false);
+        botonAyuda.setFocusable(false);
 
 
         add(panel_botones, BorderLayout.SOUTH);
@@ -115,10 +138,108 @@ public class GUI extends JFrame {
         });
     }
 
+    public void procesarSeleccion()
+    {
+        System.out.println("procesando Selección");
+    }
+
     public static void main(String[] args)
     {
+        EventQueue.invokeLater(() -> {
+                GUI juego = new GUI();
+        });
 
-        GUI juego = new GUI();
-        MoldelGeek model = new MoldelGeek();
     }
+
+    private  class Escucha implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            modelGeek.tiroInicial();
+            dados = modelGeek.getDados();
+            for (int i = 0; i < 10 ; i++)
+            {
+                dadosLabel[i].setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/" + dados[i].getImagen())).getImage().getScaledInstance(70,70, 1)));
+            }
+
+        }
+    }
+
+    private  class EscuchaDados implements MouseListener, MouseMotionListener {
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            e.getComponent().setCursor(new Cursor(Cursor.HAND_CURSOR));
+            panel1.setFocusable(true);
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (dados[0] == null)
+            {
+                headerProjec.setText("Tira los dados antes de intentar usar uno :)" );
+                return;
+            }
+            for (int i = 0 ; i < dadosLabel.length ; i++)
+            {
+                dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+                if (dadosLabel[i] == e.getSource())
+                {
+                    if (dados[i].getEstado() == "activo")
+                    {
+                        dadoSeleccionado = i;
+                        dadosLabel[i].setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+                        headerProjec.setText(dados[i].getNombre() + " :" + dados[i].getInstruccion() );
+                        Object[] options = {"Aceptar", "Cancelar"};
+                        int option = JOptionPane.showOptionDialog(null,
+                                "¿Seguro que quíeres utilizar  "+ dados[dadoSeleccionado].getNombre(),"GEET OUT MASTER",
+                                JOptionPane.PLAIN_MESSAGE,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                options,
+                                options[0]);
+                        if (option == 0)
+                        {
+                            switch (dadoSeleccionado)
+                            {
+                                    case 1:
+                                    //dadosLabel[0].addMouseMotionListener();
+                                    break;
+                            }
+                        }
+
+                    }else{
+                        headerProjec.setText("Para usar un dado debes escogerlo de entre los activos.");
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            System.out.println("aja men");
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            e.getComponent().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }
+
+
 }

@@ -1,11 +1,12 @@
 package myProject;
 
+import java.util.Map;
+
 public class MoldelGeek {
-    private Dado[] dados;
+    private Dado[] dados = new Dado[10];
 
     private int tiro, punto, estado;
     private String estadoString;
-    private int[] caras;
 
     public MoldelGeek()
     {
@@ -23,10 +24,17 @@ public class MoldelGeek {
 
     public void tiroInicial()
     {
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 10; i++)
         {
-            caras[i] = dados[i].getCara();
+            dados[i].tirarDado();
         }
     }
+
+
+    public Dado[] getDados()
+    {
+        return dados;
+    }
+
 
 }
