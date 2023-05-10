@@ -19,6 +19,8 @@ import java.util.Objects;
  * @version v.1.0.0 date:21/03/2023
  */
 public class GUI extends JFrame {
+
+
     private Header headerProjec;
     private JLabel[] dadosLabel = new JLabel[10];
 
@@ -55,6 +57,9 @@ public class GUI extends JFrame {
 
         /* Inicia la primera ronda */
         ronda = 1;
+        /**
+         * Instancia de clases utilizadas en el programa
+         */
         accionMeeple = new AccionMeeple();
         accionCohete = new AccionCohete();
         accionHeroe = new AccionHeroe();
@@ -81,8 +86,9 @@ public class GUI extends JFrame {
         panel4.setBorder(BorderFactory.createTitledBorder("Dados Utilizados"));
         JPanel panel5 = new JPanel();
 
-        // Dados por defecto.
-        // ACTIVOS
+        /**
+         * Instancia de clases utilizadas en el programa
+         */
         imagenDadoPorDefecto = new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/interrogante.png")).getImage().getScaledInstance(70,70, 1));
         for (int i = 0; i < 10 ; i++)
         {
@@ -113,10 +119,6 @@ public class GUI extends JFrame {
         modeloTabla.addRow(new Object[]{ronda, "0", "0"});
 
         panel3.add(scrollPane, BorderLayout.CENTER);
-        // Añadir componentes gráficos a cada panel
-        //panel1.add(dado1);
-        //panel1.add(dado2);
-
         // Añadir los cuatro paneles a la ventana principal
         JPanel panel_juego = new JPanel();
         JPanel panel_botones = new JPanel();
@@ -143,10 +145,6 @@ public class GUI extends JFrame {
 
         // Mostrar la ventana principal
         setVisible(true);
-        //ventana de ayuda
-        /*JPanel panelAyuda = new JPanel();
-        getContentPane().add(panelAyuda, BorderLayout.CENTER);
-        panelAyuda.setVisible(false);*/
 
         //mostrar ayuda
         botonAyuda.addActionListener(new ActionListener() {
@@ -158,7 +156,9 @@ public class GUI extends JFrame {
         });
     }
 
-
+    /**
+     * Clase principal
+     */
     public static void main(String[] args)
     {
         EventQueue.invokeLater(() -> {
@@ -166,6 +166,13 @@ public class GUI extends JFrame {
         });
 
     }
+
+
+    /**
+     * Escucha utilizado en el tirar dados, Tira los dados y organiza los dados.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
 
     private  class Escucha implements ActionListener{
 
@@ -186,6 +193,12 @@ public class GUI extends JFrame {
         }
     }
 
+
+    /**
+     * Escucha utilizado en cada uno de los dados , obtiene el dado y asigna una función segun el dado
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     private  class EscuchaDados implements MouseListener, MouseMotionListener {
 
         @Override
@@ -331,6 +344,12 @@ public class GUI extends JFrame {
 
         }
 
+
+        /**
+         * Valida el estado del juego, ronda terminada , juego continua, juego finalizado.
+         * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+         * @version v.1.0.0 date:21/03/2023
+         */
         public void validarEstado()
         {
             String estado = modelGeek.validarEstado();
@@ -348,6 +367,12 @@ public class GUI extends JFrame {
             }
         }
 
+
+        /**
+         * Reubica los dados al finalizar la ronda.
+         * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+         * @version v.1.0.0 date:21/03/2023
+         */
         public void reubicarDados(){
             panel1.removeAll();
             panel2.removeAll();
@@ -370,6 +395,13 @@ public class GUI extends JFrame {
 
 
     }
+
+
+    /**
+     * Accion especifica del poder Meeple.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
 
     private class AccionMeeple implements MouseListener{
 
@@ -420,6 +452,11 @@ public class GUI extends JFrame {
         }
     }
 
+    /**
+     * Accion especifica del Cohete.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     private class AccionCohete implements MouseListener{
 
         @Override
@@ -470,6 +507,12 @@ public class GUI extends JFrame {
 
         }
     }
+
+    /**
+     * Accion especifica Heroe.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     private class AccionHeroe implements MouseListener
     {
 
@@ -527,6 +570,11 @@ public class GUI extends JFrame {
         }
     }
 
+    /**
+     * Accion especifica del poder Corazon.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     private class AccionCorazon implements MouseListener{
 
         @Override
@@ -544,6 +592,7 @@ public class GUI extends JFrame {
 
 
             }
+
             escuchaDados.repaintDados();
             escuchaDados.validarEstado();
 

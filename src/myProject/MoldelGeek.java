@@ -9,6 +9,11 @@ public class MoldelGeek {
     private String estadoString;
 
 
+    /**
+     * Constructor , crea los 10 dados.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public MoldelGeek()
     {
         dados[0] = new Dado("activo");
@@ -23,6 +28,11 @@ public class MoldelGeek {
         dados[9] = new Dado("inactivo");
     }
 
+    /**
+     * realiza un tiro de todos los dados.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public void tiroInicial()
     {
         for (int i = 0; i < 10; i++)
@@ -31,20 +41,41 @@ public class MoldelGeek {
         }
     }
 
-
+    /**
+     * Obtiene todos los dados.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public Dado[] getDados()
     {
         return dados;
     }
 
+    /**
+     * tira un dado especifico de la zona activos.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public void accionMeeple(int dadoSeleccionado)
     {
         dados[dadoSeleccionado].tirarDado();
     }
+
+    /**
+     * Tira un dado especifico de la zona inactivos
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public void accionCorazon(int dadoSeleccionado)
     {
         dados[dadoSeleccionado].tirarDado();
     }
+
+    /**
+     * gira un dado a su cara contraria.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public void accionHeroe(int dadoSeleccionado) {
         switch (dados[dadoSeleccionado].getCara()){
             case 1:
@@ -68,6 +99,11 @@ public class MoldelGeek {
         }
     }
 
+    /**
+     * valida en que estado se encuentra el juego.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public String validarEstado()
     {
         int acciones = 0;
@@ -83,6 +119,11 @@ public class MoldelGeek {
         return "sin acciones";
     }
 
+    /**
+     * Obtiene la puntuación al acabar la ronda.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public int validarPuntuacion()
     {
         int cantidadDragones = 0;
