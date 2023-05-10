@@ -1,15 +1,13 @@
 package myProject;
 
-import java.util.Map;
-
-public class MoldelGeek {
+public class ModelGeek {
     private Dado[] dados = new Dado[10];
 
     private int tiro, puntos = 0, estado;
     private String estadoString;
 
 
-    public MoldelGeek()
+    public ModelGeek()
     {
         dados[0] = new Dado("activo");
         dados[1] = new Dado("activo");
@@ -71,16 +69,41 @@ public class MoldelGeek {
     public String validarEstado()
     {
         int acciones = 0;
+        int dadosActivos = 0;
+        int dadoSuperHeroe = 0;
+        int corazon = 0;
+        int dadosInactivos = 0;
         for (int i = 0; i < 10; i++)
         {
             if (dados[i].getCara() > 0 &&  dados[i].getCara() < 5 && dados[i].getEstado() == "activo")
                 acciones++;
+            if ( dados[i].getEstado() == "activo")
+                dadosActivos++;
+            if ( dados[i].getCara() == 3 && dados[i].getEstado() == "activo") {
+                dadoSuperHeroe++;
+            }
 
+            if ( dados[i].getCara() == 4 && dados[i].getEstado() == "activo");
+                corazon++;
+            if (dados[i].getEstado() == "inactivo")
+                dadosInactivos++;
         }
-        if (acciones > 1)
-            return "con acciones";
+        if (dadosActivos == 0)
+            return "sin acciones";
+        else if (acciones <= 1 && dadosActivos == 1)
+            return "sin acciones";
+        else if (acciones > 1 && dadoSuperHeroe == dadosActivos)
+            return "sin acciones";
+        else if (corazon>0 && dadosInactivos == 0) {
+            return "sin acciones";
+        }
+        else if (acciones == 0) {
+            return "sin acciones";
+        }
 
-        return "sin acciones";
+        return "con acciones";
+
+
     }
 
     public int validarPuntuacion()
@@ -90,13 +113,13 @@ public class MoldelGeek {
         int cantidadOtros = 0;
         for (int i = 0; i < 10; i++)
         {
-            if (dados[i].getCara() == 6 && dados[i].getEstado() == "estado")
+            if (dados[i].getCara() == 6 && dados[i].getEstado() == "activo")
             {
                 cantidad42++;
-            } else if (dados[i].getCara() == 5 && dados[i].getEstado() == "estado") {
+            } else if (dados[i].getCara() == 5 && dados[i].getEstado() == "activo") {
                 cantidadDragones++;
             }else{
-                if (dados[i].getEstado() == "estado")
+                if (dados[i].getEstado() == "activo")
                     cantidadOtros++;
             }
         }
@@ -105,7 +128,7 @@ public class MoldelGeek {
             puntos = 0;
         } else if (cantidadOtros > 0) {
             puntos += 0;
-            return 0;
+
         }else if (cantidad42 > 0){
             for(int i = 1; i <= cantidad42; i++) {
                 puntos += i;
@@ -116,6 +139,14 @@ public class MoldelGeek {
     }
 
 
+    public int getDadosInactivos() {
+        int dadosInactivos = 0;
+        for (int i = 0; i < 10; i++)
+        {
+            if (dados[i].getEstado() == "inactivo")
+                dadosInactivos++;
+        }
+        return dadosInactivos;
 
-
+    }
 }
