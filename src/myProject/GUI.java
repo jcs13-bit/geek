@@ -253,19 +253,25 @@ public class GUI extends JFrame {
                             break;
                         /* ACCION HEROE */
                     case 3:
-                        headerProjec.setText("voltea el dado a su cara opuesta");
-                        for (int i = 0 ; i < dadosLabel.length ; i++)
-                        {
-                            dadosLabel[i].removeMouseListener(this);
-                            dadosLabel[i].addMouseListener(accionHeroe);
+                        if (modelGeek.validarEstado() == "con acciones") {
+                            headerProjec.setText("voltea el dado a su cara opuesta");
+                            for (int i = 0; i < dadosLabel.length; i++) {
+                                dadosLabel[i].removeMouseListener(this);
+                                dadosLabel[i].addMouseListener(accionHeroe);
+                            }
+                        }else{
+                            validarEstado();
                         }
                         break;
                         /* ACCION CORAZON */
                         case 4:
                             headerProjec.setText("Elimina uno de los dados inactivos enviándolo a la sección de dados activos.");
-                            for (int i = 0; i < dadosLabel.length; i++) {
-                                dadosLabel[i].removeMouseListener(this);
-                                dadosLabel[i].addMouseListener(accionCorazon);
+
+                            if (modelGeek.getDadosInactivos() >= 1){
+                                for (int i = 0; i < dadosLabel.length; i++) {
+                                    dadosLabel[i].removeMouseListener(this);
+                                    dadosLabel[i].addMouseListener(accionCorazon);
+                                }
                             }
                             break;
 
@@ -278,6 +284,9 @@ public class GUI extends JFrame {
                         repaintDados();
 
                     }
+                }
+                else {
+                    validarEstado();
                 }
             }
         }
@@ -328,7 +337,7 @@ public class GUI extends JFrame {
         public void validarEstado()
         {
             String estado = modelGeek.validarEstado();
-            if (estado == "sin acciones")
+            if (estado == "sin acciones" )
             {
                 int puntuacion = modelGeek.validarPuntuacion();
                 ronda++;
@@ -339,9 +348,7 @@ public class GUI extends JFrame {
                 for (int i = 0; i < 10; i++) {
                     dadosLabel[i].removeMouseListener(this);
                 }
-                System.out.println("su puntaje es: " + puntuacion);
 
-                System.out.println(puntuacion);
             }
         }
 

@@ -70,18 +70,40 @@ public class ModelGeek {
     {
         int acciones = 0;
         int dadosActivos = 0;
+        int dadoSuperHeroe = 0;
+        int corazon = 0;
+        int dadosInactivos = 0;
         for (int i = 0; i < 10; i++)
         {
             if (dados[i].getCara() > 0 &&  dados[i].getCara() < 5 && dados[i].getEstado() == "activo")
                 acciones++;
             if ( dados[i].getEstado() == "activo")
                 dadosActivos++;
+            if ( dados[i].getCara() == 3 && dados[i].getEstado() == "activo") {
+                dadoSuperHeroe++;
+            }
+
+            if ( dados[i].getCara() == 4 && dados[i].getEstado() == "activo");
+                corazon++;
+            if (dados[i].getEstado() == "inactivo")
+                dadosInactivos++;
+        }
+        if (dadosActivos == 0)
+            return "sin acciones";
+        else if (acciones <= 1 && dadosActivos == 1)
+            return "sin acciones";
+        else if (acciones > 1 && dadoSuperHeroe == dadosActivos)
+            return "sin acciones";
+        else if (corazon>0 && dadosInactivos == 0) {
+            return "sin acciones";
+        }
+        else if (acciones == 0) {
+            return "sin acciones";
         }
 
-        if (acciones > 1 || (dadosActivos  > 1 && acciones >= 1) )
-            return "con acciones";
+        return "con acciones";
 
-        return "sin acciones";
+
     }
 
     public int validarPuntuacion()
@@ -117,6 +139,14 @@ public class ModelGeek {
     }
 
 
+    public int getDadosInactivos() {
+        int dadosInactivos = 0;
+        for (int i = 0; i < 10; i++)
+        {
+            if (dados[i].getEstado() == "inactivo")
+                dadosInactivos++;
+        }
+        return dadosInactivos;
 
-
+    }
 }
