@@ -1,17 +1,11 @@
 package myProject;
 
-import javax.imageio.ImageIO;
-import javax.management.modelmbean.ModelMBean;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.util.Objects;
 
 /**
  * This class is used for ...
@@ -32,7 +26,7 @@ public class GUI extends JFrame {
 
     private EscuchaDados escuchaDados;
     private int dadoSeleccionado;
-    private MoldelGeek modelGeek;
+    private ModelGeek modelGeek;
 
 
     private JPanel panel1;
@@ -64,7 +58,7 @@ public class GUI extends JFrame {
         accionCohete = new AccionCohete();
         accionHeroe = new AccionHeroe();
         accionCorazon = new AccionCorazon();
-        modelGeek = new MoldelGeek();
+        modelGeek = new ModelGeek();
         // Configurar la ventana principal
         headerProjec = new Header("Geets Out Master -- Game", Color.black);
         this.add(headerProjec, BorderLayout.NORTH);
@@ -364,6 +358,9 @@ public class GUI extends JFrame {
                 for (int i = 0; i < 10; i++) {
                     dadosLabel[i].removeMouseListener(this);
                 }
+                System.out.println("su puntaje es: " + puntuacion);
+
+                System.out.println(puntuacion);
             }
         }
 
@@ -420,6 +417,7 @@ public class GUI extends JFrame {
                         headerProjec.setText("Ahora sigue jugando!!");
                     }
                 }
+
             }
             if (dadoActivo == true)
             {
