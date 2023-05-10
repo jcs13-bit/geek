@@ -83,7 +83,7 @@ public class ModelGeek {
                 dadoSuperHeroe++;
             }
 
-            if ( dados[i].getCara() == 4 && dados[i].getEstado() == "activo");
+            if ( dados[i].getCara() == 4 && dados[i].getEstado() == "activo")
                 corazon++;
             if (dados[i].getEstado() == "inactivo")
                 dadosInactivos++;
