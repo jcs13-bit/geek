@@ -26,11 +26,6 @@ public class ModelGeek {
         dados[9] = new Dado("inactivo");
     }
 
-    /**
-     * realiza un tiro de todos los dados.
-     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
-     * @version v.1.0.0 date:21/03/2023
-     */
     public void tiroInicial()
     {
         for (int i = 0; i < 10; i++)
@@ -39,41 +34,20 @@ public class ModelGeek {
         }
     }
 
-    /**
-     * Obtiene todos los dados.
-     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
-     * @version v.1.0.0 date:21/03/2023
-     */
+
     public Dado[] getDados()
     {
         return dados;
     }
 
-    /**
-     * tira un dado especifico de la zona activos.
-     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
-     * @version v.1.0.0 date:21/03/2023
-     */
     public void accionMeeple(int dadoSeleccionado)
     {
         dados[dadoSeleccionado].tirarDado();
     }
-
-    /**
-     * Tira un dado especifico de la zona inactivos
-     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
-     * @version v.1.0.0 date:21/03/2023
-     */
     public void accionCorazon(int dadoSeleccionado)
     {
         dados[dadoSeleccionado].tirarDado();
     }
-
-    /**
-     * gira un dado a su cara contraria.
-     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
-     * @version v.1.0.0 date:21/03/2023
-     */
     public void accionHeroe(int dadoSeleccionado) {
         switch (dados[dadoSeleccionado].getCara()){
             case 1:
@@ -97,34 +71,46 @@ public class ModelGeek {
         }
     }
 
-    /**
-     * valida en que estado se encuentra el juego.
-     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
-     * @version v.1.0.0 date:21/03/2023
-     */
     public String validarEstado()
     {
         int acciones = 0;
         int dadosActivos = 0;
+        int dadoSuperHeroe = 0;
+        int corazon = 0;
+        int dadosInactivos = 0;
         for (int i = 0; i < 10; i++)
         {
             if (dados[i].getCara() > 0 &&  dados[i].getCara() < 5 && dados[i].getEstado() == "activo")
                 acciones++;
             if ( dados[i].getEstado() == "activo")
                 dadosActivos++;
+            if ( dados[i].getCara() == 3 && dados[i].getEstado() == "activo") {
+                dadoSuperHeroe++;
+            }
+
+            if ( dados[i].getCara() == 4 && dados[i].getEstado() == "activo");
+                corazon++;
+            if (dados[i].getEstado() == "inactivo")
+                dadosInactivos++;
+        }
+        if (dadosActivos == 0)
+            return "sin acciones";
+        else if (acciones <= 1 && dadosActivos == 1)
+            return "sin acciones";
+        else if (acciones > 1 && dadoSuperHeroe == dadosActivos)
+            return "sin acciones";
+        else if (corazon>0 && dadosInactivos == 0) {
+            return "sin acciones";
+        }
+        else if (acciones == 0) {
+            return "sin acciones";
         }
 
-        if (acciones > 1 || (dadosActivos  > 1 && acciones >= 1) )
-            return "con acciones";
+        return "con acciones";
 
-        return "sin acciones";
+
     }
 
-    /**
-     * Obtiene la puntuación al acabar la ronda.
-     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
-     * @version v.1.0.0 date:21/03/2023
-     */
     public int validarPuntuacion()
     {
         int cantidadDragones = 0;
@@ -158,6 +144,14 @@ public class ModelGeek {
     }
 
 
+    public int getDadosInactivos() {
+        int dadosInactivos = 0;
+        for (int i = 0; i < 10; i++)
+        {
+            if (dados[i].getEstado() == "inactivo")
+                dadosInactivos++;
+        }
+        return dadosInactivos;
 
-
+    }
 }
