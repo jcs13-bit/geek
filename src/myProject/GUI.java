@@ -507,7 +507,12 @@ public class GUI extends JFrame {
                 {
                     dadoSeleccionado = i;
                     dados[i].setEstado("activo");
-                    headerProjec.setText("Ahora sigue tirando!!");
+                    headerProjec.setText("Has recuperado un dado inactivo, continua");
+
+                    if (dados[i].getEstado() == "activo"){
+                        headerProjec.setText("solo puedes seleccionar dados inactivos");
+
+                    }
                 }
                 dadosLabel[i].removeMouseListener(this);
                 dadosLabel[i].addMouseListener(escuchaDados);
