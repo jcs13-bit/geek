@@ -77,7 +77,7 @@ public class MoldelGeek {
                 acciones++;
 
         }
-        if (acciones > 0)
+        if (acciones > 1)
             return "con acciones";
 
         return "sin acciones";
@@ -90,13 +90,14 @@ public class MoldelGeek {
         int cantidadOtros = 0;
         for (int i = 0; i < 10; i++)
         {
-            if (dados[i].getCara() == 6)
+            if (dados[i].getCara() == 6 && dados[i].getEstado() == "estado")
             {
                 cantidad42++;
-            } else if (dados[i].getCara() == 5) {
+            } else if (dados[i].getCara() == 5 && dados[i].getEstado() == "estado") {
                 cantidadDragones++;
             }else{
-                cantidadOtros++;
+                if (dados[i].getEstado() == "estado")
+                    cantidadOtros++;
             }
         }
         if (cantidadDragones > 0)
