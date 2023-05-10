@@ -1,13 +1,15 @@
 package myProject;
 
-public class ModelGeek {
+import java.util.Map;
+
+public class MoldelGeek {
     private Dado[] dados = new Dado[10];
 
     private int tiro, puntos = 0, estado;
     private String estadoString;
 
 
-    public ModelGeek()
+    public MoldelGeek()
     {
         dados[0] = new Dado("activo");
         dados[1] = new Dado("activo");
@@ -69,16 +71,13 @@ public class ModelGeek {
     public String validarEstado()
     {
         int acciones = 0;
-        int dadosActivos = 0;
         for (int i = 0; i < 10; i++)
         {
             if (dados[i].getCara() > 0 &&  dados[i].getCara() < 5 && dados[i].getEstado() == "activo")
                 acciones++;
-            if ( dados[i].getEstado() == "activo")
-                dadosActivos++;
-        }
 
-        if (acciones > 1 || (dadosActivos  > 1 && acciones >= 1) )
+        }
+        if (acciones > 1)
             return "con acciones";
 
         return "sin acciones";
@@ -91,13 +90,13 @@ public class ModelGeek {
         int cantidadOtros = 0;
         for (int i = 0; i < 10; i++)
         {
-            if (dados[i].getCara() == 6 && dados[i].getEstado() == "activo")
+            if (dados[i].getCara() == 6 && dados[i].getEstado() == "estado")
             {
                 cantidad42++;
-            } else if (dados[i].getCara() == 5 && dados[i].getEstado() == "activo") {
+            } else if (dados[i].getCara() == 5 && dados[i].getEstado() == "estado") {
                 cantidadDragones++;
             }else{
-                if (dados[i].getEstado() == "activo")
+                if (dados[i].getEstado() == "estado")
                     cantidadOtros++;
             }
         }
@@ -106,7 +105,7 @@ public class ModelGeek {
             puntos = 0;
         } else if (cantidadOtros > 0) {
             puntos += 0;
-
+            return 0;
         }else if (cantidad42 > 0){
             for(int i = 1; i <= cantidad42; i++) {
                 puntos += i;
