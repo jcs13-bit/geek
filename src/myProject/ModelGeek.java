@@ -12,7 +12,7 @@ public class ModelGeek {
      * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
      * @version v.1.0.0 date:21/03/2023
      */
-    public MoldelGeek()
+    public ModelGeek()
     {
         dados[0] = new Dado("activo");
         dados[1] = new Dado("activo");
@@ -88,7 +88,7 @@ public class ModelGeek {
                 dadoSuperHeroe++;
             }
 
-            if ( dados[i].getCara() == 4 && dados[i].getEstado() == "activo");
+            if ( dados[i].getCara() == 4 && dados[i].getEstado() == "activo")
                 corazon++;
             if (dados[i].getEstado() == "inactivo")
                 dadosInactivos++;
