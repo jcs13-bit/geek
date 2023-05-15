@@ -7,6 +7,11 @@ public class ModelGeek {
     private String estadoString;
 
 
+    /**
+     * Constructor , crea los 10 dados.
+     * @autor Johan, Jose y Jhonatan edier.castro@correounivalle.edu.co
+     * @version v.1.0.0 date:21/03/2023
+     */
     public ModelGeek()
     {
         dados[0] = new Dado("activo");

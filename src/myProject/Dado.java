@@ -56,7 +56,7 @@ public class Dado {
                 break;
 
             case 3:
-                imagen = "super_herue.png";
+                imagen = "super_heroe.png";
                 nombre = "Super Heroe";
                 instruccion = "Voltea un dado de la selección de activos.";
                 break;

@@ -82,6 +82,7 @@ public class GUI extends JFrame {
 
         /**
          * Instancia de clases utilizadas en el programa
+         * @author Johan Castro
          */
         imagenDadoPorDefecto = new ImageIcon(new ImageIcon(getClass().getResource("/resources/caras/interrogante.png")).getImage().getScaledInstance(70,70, 1));
         for (int i = 0; i < 10 ; i++)
